@@ -11,11 +11,7 @@ namespace Algorithms
     {
         static void Main(string[] args)
         {
-            int[] arr = new int[] { 2, 11, 4, 7, 3, 111, 54, 23, 87 };
-            InsertionSort.Sorting(ref arr);
-            foreach(int val in arr)
-                Console.Write(val + "\t");
-            Console.ReadKey();
+
         }
     }
 }

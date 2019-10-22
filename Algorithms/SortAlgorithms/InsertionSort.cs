@@ -1,27 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms.SortAlgorithms
 {
-    class InsertionSort
+    public class InsertSort<T> where T : IComparable
     {
-        public static void Sorting(ref int[] array)
+        public List<T> Items { get; set; } = new List<T>();
+        public InsertSort(IEnumerable<T> items)
         {
-            for (int i = 1; i < array.Length; i++)
+            Items.AddRange(items);
+        }
+
+        public InsertSort() { }
+
+        public void MakeSort()
+        {
+            for (int i = 1; i < Items.Count; i++)
             {
-                var temp = array[i];
+                var temp = Items[i];
                 var j = i;
-                while (j > 0 && temp < array[j - 1])
+                while (j > 0 && Compare(temp, Items[j - 1]) == -1)
                 {
-                    int tmp = array[j];
-                    array[j] = array[j - 1];
-                    array[j - 1] = tmp;
+                    Swap(j, j - 1);
                     j--;
                 }
-                array[j] = temp;
+                Items[j] = temp;
+            }
+        }
+
+        //
+        private int Compare(T a, T b)
+        {
+            return a.CompareTo(b);
+        }
+        private void Swap(int positionA, int positionB)
+        {
+            if (positionA < Items.Count && positionB < Items.Count)
+            {
+                var temp = Items[positionA];
+                Items[positionA] = Items[positionB];
+                Items[positionB] = temp;
             }
         }
     }

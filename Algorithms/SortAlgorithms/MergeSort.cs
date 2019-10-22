@@ -6,58 +6,92 @@ using System.Threading.Tasks;
 
 namespace Algorithms.SortAlgorithms
 {
-    public class MergeSort
+    public class MergeSort<T> where T : IComparable
     {
-        static public int[] MergeSorting(int[] array)
+        public List<T> Items { get; set; } = new List<T>();
+        public MergeSort(IEnumerable<T> items)
         {
-            if (array.Length == 1)
-                return array;
-
-            int mid = array.Length / 2;
-            int[] left = array.Take(mid).ToArray();
-            int[] right = array.Skip(mid).ToArray();
-
-
-            return Merge(MergeSorting(left), MergeSorting(right));
+            Items.AddRange(items);
         }
 
-        static private int[] Merge(int[] left, int[] right)
-        {
-            int length = left.Length + right.Length;
-            int leftPointer = 0;
-            int rightPointer = 0;
-            List<int> newArray = new List<int>();
+        public MergeSort() { }
 
-            for (int i = 0; i < length; ++i)
+        public void MakeSort()
+        {
+            var sorted = Sort(Items);
+            for (int i = 0; i < sorted.Count; i++)
             {
-                if (leftPointer < left.Length && rightPointer < right.Length)
+                Set(i, sorted[i]);
+            }
+        }
+
+        private List<T> Sort(List<T> items)
+        {
+            if (items.Count == 1)
+            {
+                return items;
+            }
+
+            var mid = items.Count / 2;
+
+            var left = items.Take(mid).ToList();
+            var right = items.Skip(mid).ToList();
+
+            return Merge(Sort(left), Sort(right));
+        }
+
+        private List<T> Merge(List<T> left, List<T> right)
+        {
+            var length = left.Count + right.Count;
+            var leftPointer = 0;
+            var rightPointer = 0;
+
+            var result = new List<T>(length);
+
+            for (int i = 0; i < length; i++)
+            {
+                if (leftPointer < left.Count && rightPointer < right.Count)
                 {
-                    if (left[leftPointer] < right[rightPointer])
+                    if (Compare(left[leftPointer], right[rightPointer]) == -1)
                     {
-                        newArray.Add(left[leftPointer]);
-                        ++leftPointer;
+                        result.Add(left[leftPointer]);
+                        leftPointer++;
                     }
                     else
                     {
-                        newArray.Add(right[rightPointer]);
-                        ++rightPointer;
+                        result.Add(right[rightPointer]);
+                        rightPointer++;
                     }
                 }
                 else
                 {
-                    if (leftPointer < left.Length)
+                    if (rightPointer < right.Count)
                     {
-                        newArray.Add(left[leftPointer]);
-                        ++leftPointer;
+                        result.Add(right[rightPointer]);
+                        rightPointer++;
                     }
                     else
                     {
-                        newArray.Add(right[rightPointer]);
-                        ++rightPointer;
+                        result.Add(left[leftPointer]);
+                        leftPointer++;
                     }
                 }
             }
-            return newArray.ToArray();
+
+            return result;
+        }
+
+        //
+        private void Set(int position, T item)
+        {
+            if (position < Items.Count)
+            {
+                Items[position] = item;
+            }
+        }
+        private int Compare(T a, T b)
+        {
+            return a.CompareTo(b);
         }
     }
 }

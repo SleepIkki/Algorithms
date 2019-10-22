@@ -6,44 +6,64 @@ using System.Threading.Tasks;
 
 namespace Algorithms.SortAlgorithms
 {
-    public class QuickSort
+    public class QuickSort<T> where T : IComparable
     {
-        private static void Swap(ref int x, ref int y)
+        public List<T> Items { get; set; } = new List<T>();
+        public QuickSort(IEnumerable<T> items)
         {
-            int temp = x;
-            x = y;
-            y = temp;
+            Items.AddRange(items);
         }
-        private static int Partition(int[] array, int leftPointer, int rightPointer)
-        {
-            int pivot = leftPointer - 1;
 
-            for (int i = leftPointer; i < rightPointer; ++i)
+        public QuickSort() { }
+
+        public void MakeSort()
+        {
+            Qsort(0, Items.Count - 1);
+        }
+
+        private void Qsort(int left, int right)
+        {
+            if (left >= right)
             {
-                if (array[i] < array[rightPointer])
+                return;
+            }
+
+            var pivot = Sorting(left, right);
+            Qsort(left, pivot - 1);
+            Qsort(pivot + 1, right);
+        }
+
+        private int Sorting(int left, int right)
+        {
+            var pointer = left;
+
+            for (int i = left; i <= right; i++)
+            {
+                if (Compare(Items[i], Items[right]) == -1)
                 {
-                    ++pivot;
-                    Swap(ref array[pivot], ref array[i]);
+                    Swap(pointer, i);
+                    pointer++;
                 }
             }
-            ++pivot;
-            Swap(ref array[pivot], ref array[rightPointer]);
-            return pivot;
-        }
-        private static int[] QSort(int[] array, int leftPointer, int rightPointer)
-        {
-            if (leftPointer >= rightPointer)
-                return array;
 
-            int pivot = Partition(array, leftPointer, rightPointer);
-            QSort(array, leftPointer, pivot - 1);
-            QSort(array, pivot + 1, rightPointer);
-
-            return array;
+            Swap(pointer, right);
+            return pointer;
         }
-        public static int[] QuickSorting(int[] array)
+
+        //
+
+        private void Swap(int positionA, int positionB)
         {
-            return QSort(array, 0, array.Length - 1);
+            if (positionA < Items.Count && positionB < Items.Count)
+            {
+                var temp = Items[positionA];
+                Items[positionA] = Items[positionB];
+                Items[positionB] = temp;
+            }
+        }
+        private int Compare(T a, T b)
+        {
+            return a.CompareTo(b);
         }
     }
 }

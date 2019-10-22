@@ -1,48 +1,109 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Algorithms.SortAlgorithms;
+using Algorithms.DataStructure;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AlgorithmTest
 {
     [TestClass]
-    class _100
+    public class _100
     {
-        Random rnd = new Random();
-        int[] Items;
-        List<int> Sorted = new List<int>();
+        protected Random rnd = new Random();
+        protected List<int> Items = new List<int>();
+        protected List<int> Sorted = new List<int>();
 
         [TestInitialize]
-        public void Init()
+        public virtual void Init()
         {
-            Items = new int[100];
+            Items.Clear();
             for (int i = 0; i < 100; i++)
             {
-                Items[i] = rnd.Next(0, 100);
+                Items.Add(rnd.Next(0, 1000));
             }
 
             Sorted.Clear();
             Sorted.AddRange(Items.OrderBy(x => x).ToArray());
         }
+
+        [TestMethod]
+        public void InsertSortTest()
+        {
+            // arrange
+            var insert = new InsertSort<int>();
+            insert.Items.AddRange(Items);
+
+            // act
+            insert.MakeSort();
+
+            // assert
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Assert.AreEqual(Sorted[i], insert.Items[i]);
+            }
+        }
+        [TestMethod]
+        public void HeapSortTest()
+        {
+            // arrange
+            var heap = new Heap<int>(Items);
+
+            // act
+            heap.MakeSort();
+
+            // assert
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Assert.AreEqual(Sorted[i], heap.Items[i]);
+            }
+        }
+        [TestMethod]
+        public void SelectionSortTest()
+        {
+            // arrange
+            var selection = new SelectionSort<int>();
+            selection.Items.AddRange(Items);
+
+            // act
+            selection.MakeSort();
+
+            // assert
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Assert.AreEqual(Sorted[i], selection.Items[i]);
+            }
+        }
         [TestMethod]
         public void MergeSortTest()
         {
-            int[] merge = MergeSort.MergeSorting(Items);
+            // arrange
+            var merge = new MergeSort<int>();
+            merge.Items.AddRange(Items);
 
-            for (int i = 0; i < Items.Length; i++)
+            // act
+            merge.MakeSort();
+
+            // assert
+            for (int i = 0; i < Items.Count; i++)
             {
-                Assert.AreEqual(Sorted[i], merge[i]);
+                Assert.AreEqual(Sorted[i], merge.Items[i]);
             }
         }
         [TestMethod]
         public void QuickSortTest()
         {
-            List<int> merge = QuickSort.QuickSorting(Items.ToArray()).ToList();
+            // arrange
+            var quick = new QuickSort<int>();
+            quick.Items.AddRange(Items);
 
-            for (int i = 0; i < Items.Length; i++)
+            // act
+            quick.MakeSort();
+
+            // assert
+            for (int i = 0; i < Items.Count; i++)
             {
-                Assert.AreEqual(Sorted[i], merge[i]);
+                Assert.AreEqual(Sorted[i], quick.Items[i]);
             }
         }
     }
