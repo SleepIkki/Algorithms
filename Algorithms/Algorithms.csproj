@@ -38,7 +38,10 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="SortAlgorithms\InsertionSort.cs" />
+    <Compile Include="SortAlgorithms\MergeSort.cs" />
+    <Compile Include="SortAlgorithms\QuickSort.cs" />
     <Compile Include="SortAlgorithms\SelectionSort.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
